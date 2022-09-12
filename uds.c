@@ -72,7 +72,17 @@ int main(int argc, char *argv[])
             }
             else if (n == -1)
             {
-                perror("read");
+                perror("client read");
+                return 1;
+            }
+            n = write(nfd, buf, size);
+            if (n == 0)
+            {
+                break;
+            }
+            else if (n == -1)
+            {
+                perror("client write");
                 return 1;
             }
             sum += n;
@@ -104,7 +114,12 @@ int main(int argc, char *argv[])
         {
             if (write(fd, buf, size) != size)
             {
-                perror("wirte");
+                perror("server write");
+                return 1;
+            }
+            if (read(fd, buf, size) != size)
+            {
+                perror("server read");
                 return 1;
             }
         }
